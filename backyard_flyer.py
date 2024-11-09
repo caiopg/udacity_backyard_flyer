@@ -37,11 +37,13 @@ class BackyardFlyer(Drone):
 
     def local_position_callback(self):
         """
-        TODO: Implement this method
-
         This triggers when `MsgID.LOCAL_POSITION` is received and self.local_position contains new data
         """
-        pass
+        if self.flight_phase == Phases.TAKEOFF:
+            altitude = -1.0 * self.local_position[2]
+
+        if altitude > 0.95 * self.target_position[2]:
+            # TODO
 
     def velocity_callback(self):
         """
