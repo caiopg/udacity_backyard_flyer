@@ -42,8 +42,8 @@ class BackyardFlyer(Drone):
         if self.flight_phase == Phases.TAKEOFF:
             altitude = -1.0 * self.local_position[2]
 
-        if altitude > 0.95 * self.target_position[2]:
-            # TODO
+            if altitude > 0.95 * self.target_position[2]:
+            self.waypoint_transition()
 
     def velocity_callback(self):
         """
