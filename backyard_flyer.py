@@ -55,11 +55,16 @@ class BackyardFlyer(Drone):
 
     def state_callback(self):
         """
-        TODO: Implement this method
-
         This triggers when `MsgID.STATE` is received and self.armed and self.guided contain new data
         """
-        pass
+        if not self.in_mission:
+            return
+            
+        if self.flight_phase == Phases.MANUAL:
+            self.arming_transition()
+        elif self.flight_phase == Phases.ARMING:
+            if self.armed:
+                self.takeoff_transition()
 
     def calculate_box(self):
         """TODO: Fill out this method
@@ -68,15 +73,19 @@ class BackyardFlyer(Drone):
         """
         pass
 
-    def arming_transition(self):
-        """TODO: Fill out this method
-        
+    def arming_transition(self):        
         1. Take control of the drone
         2. Pass an arming command
         3. Set the home location to current position
         4. Transition to the ARMING state
         """
         print("arming transition")
+        self.take_control()
+        self.arm()
+
+        self.set_home_position(self.global_position[0], self.global_position[1], self.global_position[2])
+
+        self.flight_phase = Phases.ARMING
 
     def takeoff_transition(self):
         """TODO: Fill out this method
