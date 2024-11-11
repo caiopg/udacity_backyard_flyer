@@ -55,11 +55,12 @@ class BackyardFlyer(Drone):
 
     def velocity_callback(self):
         """
-        TODO: Implement this method
-
         This triggers when `MsgID.LOCAL_VELOCITY` is received and self.local_velocity contains new data
         """
-        pass
+        if self.flight_phase == Phases.LANDING:
+            if ((self.global_position[2] - self.global_home[2] < 0.1) and
+            abs(self.local_position[2]) < 0.01):
+                self.disarming_transition()
 
     def state_callback(self):
         """
@@ -73,6 +74,9 @@ class BackyardFlyer(Drone):
         elif self.flight_phase == Phases.ARMING:
             if self.armed:
                 self.takeoff_transition()
+        elif self.flight_phase == Phases.DISARMING:
+            if not self.armed:
+                self.manual_transition()
 
     def calculate_box(self):
         """
@@ -126,20 +130,26 @@ class BackyardFlyer(Drone):
         
 
     def landing_transition(self):
-        """TODO: Fill out this method
-        
+        """
         1. Command the drone to land
         2. Transition to the LANDING state
         """
         print("landing transition")
 
+        self.land()
+
+        self.flight_phase = Phases.LANDING
+
     def disarming_transition(self):
-        """TODO: Fill out this method
-        
+        """
         1. Command the drone to disarm
         2. Transition to the DISARMING state
         """
         print("disarm transition")
+        
+        self.disarm()
+        
+        self.flight_phase = Phases.DISARMING
 
     def manual_transition(self):
         """This method is provided
