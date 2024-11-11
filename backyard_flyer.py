@@ -24,7 +24,10 @@ class BackyardFlyer(Drone):
         super().__init__(connection)
         self.target_position = np.array([0.0, 0.0, 0.0])
         self.all_waypoints = self.calculate_box()
+        self.amount_waypoints = len(self.all_waypoints)
+        self.next_waypoint = 0
         self.in_mission = True
+        self.target_altitude = 3.0
         self.check_state = {}
 
         # initial state
@@ -44,6 +47,11 @@ class BackyardFlyer(Drone):
 
             if altitude > 0.95 * self.target_position[2]:
                 self.waypoint_transition()
+        elif self.flight_phase == Phases.WAYPOINT and self.local_position[0] > 0.95 * self.all_waypoints[self.next_waypoint-1][0] and self.local_position[1] > 0.95 * self.all_waypoints[self.next_waypoint-1][1]:
+            if self.next_waypoint < self.amount_waypoints:
+                self.waypoint_transition()
+            else:
+                self.landing_transition()
 
     def velocity_callback(self):
         """
@@ -72,10 +80,10 @@ class BackyardFlyer(Drone):
         """
 
         return [
-            (self.target_location[0] + 10.0, self.target_location[1], self.target_location[2]),
-            (self.target_location[0] + 10.0, self.target_location[1] + 10.0, self.target_location[2]),
-            (self.target_location[0], self.target_location[1] + 10.0, self.target_location[2]),
-            (self.target_location[0], self.target_location[1], self.target_location[2])
+            (10.0, 0.0, self.target_altitude, 0.0),
+            (10.0, 10.0, self.target_altitude, 0.0),
+            (0.0, 10.0, self.target_altitude, 0.0),
+            (0.0, 0.0, self.target_altitude, 0.0)
         ]
 
     def arming_transition(self):
@@ -100,18 +108,22 @@ class BackyardFlyer(Drone):
         3. Transition to the TAKEOFF state
         """
         print("takeoff transition")
-        target_altitude = 3.0
-        self.target_position[2] = target_altitude
+        self.target_position[2] = self.target_altitude
         self.takeoff(target_altitude)
         self.flight_phase = Phases.TAKEOFF
 
     def waypoint_transition(self):
-        """TODO: Fill out this method
-    
+        """
         1. Command the next waypoint position
         2. Transition to WAYPOINT state
         """
         print("waypoint transition")
+        
+        self.cmd_position(self.all_waypoints[self.next_waypoint][0], self.all_waypoints[self.next_waypoint][1], self.all_waypoints[self.next_waypoint][2], self.all_waypoints[self.next_waypoint][3])
+        self.next_waypoint = self.next_waypoint + 1
+
+        self.flight_phase = Phases.WAYPOINT
+        
 
     def landing_transition(self):
         """TODO: Fill out this method
