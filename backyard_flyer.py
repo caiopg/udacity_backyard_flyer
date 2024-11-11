@@ -23,7 +23,7 @@ class BackyardFlyer(Drone):
     def __init__(self, connection):
         super().__init__(connection)
         self.target_position = np.array([0.0, 0.0, 0.0])
-        self.all_waypoints = []
+        self.all_waypoints = self.calculate_box()
         self.in_mission = True
         self.check_state = {}
 
@@ -67,13 +67,19 @@ class BackyardFlyer(Drone):
                 self.takeoff_transition()
 
     def calculate_box(self):
-        """TODO: Fill out this method
-        
+        """
         1. Return waypoints to fly a box
         """
-        pass
 
-    def arming_transition(self):        
+        return [
+            (self.target_location[0] + 10.0, self.target_location[1], self.target_location[2]),
+            (self.target_location[0] + 10.0, self.target_location[1] + 10.0, self.target_location[2]),
+            (self.target_location[0], self.target_location[1] + 10.0, self.target_location[2]),
+            (self.target_location[0], self.target_location[1], self.target_location[2])
+        ]
+
+    def arming_transition(self):
+        """
         1. Take control of the drone
         2. Pass an arming command
         3. Set the home location to current position
@@ -94,7 +100,7 @@ class BackyardFlyer(Drone):
         3. Transition to the TAKEOFF state
         """
         print("takeoff transition")
-        target_altitude = 5.0
+        target_altitude = 3.0
         self.target_position[2] = target_altitude
         self.takeoff(target_altitude)
         self.flight_phase = Phases.TAKEOFF
