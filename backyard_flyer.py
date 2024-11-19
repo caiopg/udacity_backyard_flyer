@@ -66,7 +66,7 @@ class BackyardFlyer(Drone):
         """
         if self.flight_state == States.LANDING:
             if ((self.global_position[2] - self.global_home[2] < 0.1) and
-            abs(self.local_position[2]) < 0.01):
+            abs(self.local_position[2]) < 0.05):
                 self.disarming_transition()
 
     def state_callback(self):
