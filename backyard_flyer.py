@@ -113,7 +113,7 @@ class BackyardFlyer(Drone):
         """
         print("takeoff transition")
         self.target_position[2] = self.target_altitude
-        self.takeoff(target_altitude)
+        self.takeoff(self.target_altitude)
         self.flight_phase = Phases.TAKEOFF
 
     def waypoint_transition(self):
