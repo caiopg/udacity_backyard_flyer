@@ -54,7 +54,7 @@ class BackyardFlyer(Drone):
 
             if altitude > 0.95 * self.target_position[2]:
                 self.waypoint_transition()
-        elif self.flight_state == States.WAYPOINT and  abs(self.local_position[0] - self.all_waypoints[self.next_waypoint-1][0]) < 0.1 and abs(self.local_position[1] - self.all_waypoints[self.next_waypoint-1][1]) < 0.1:
+        elif self.flight_state == States.WAYPOINT and  abs(self.local_position[0] - self.all_waypoints[self.next_waypoint-1][0]) < 1 and abs(self.local_position[1] - self.all_waypoints[self.next_waypoint-1][1]) < 1:
             if self.next_waypoint < self.amount_waypoints:
                 self.waypoint_transition()
             else:
