@@ -43,10 +43,11 @@ class BackyardFlyer(Drone):
         This triggers when `MsgID.LOCAL_POSITION` is received and self.local_position contains new data
         """
 
+        #TODO remove
         print("local_position_callback")
-        print("local_position[0]: " + local_position[0])
-        print("local_position[1]: " + local_position[1])
-        print("local_position[2]: " + local_position[2])
+        print("local_position[0]: " + self.local_position[0])
+        print("local_position[1]: " + self.local_position[1])
+        print("local_position[2]: " + self.local_position[2])
         
         if self.flight_state == States.TAKEOFF:
             altitude = -1.0 * self.local_position[2]
