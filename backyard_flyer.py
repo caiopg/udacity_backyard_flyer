@@ -23,8 +23,8 @@ class BackyardFlyer(Drone):
     def __init__(self, connection):
         super().__init__(connection)
         self.target_position = np.array([0.0, 0.0, 0.0])
-        self.all_waypoints = self.calculate_box()
         self.target_altitude = 3.0
+        self.all_waypoints = self.calculate_box()
         self.amount_waypoints = len(self.all_waypoints)
         self.next_waypoint = 0
         self.in_mission = True
