@@ -45,9 +45,9 @@ class BackyardFlyer(Drone):
 
         #TODO remove
         print("local_position_callback")
-        print("local_position[0]: " + self.local_position[0])
-        print("local_position[1]: " + self.local_position[1])
-        print("local_position[2]: " + self.local_position[2])
+        print("local_position[0]: " + str(self.local_position[0]) + " x waypoint: " + str(self.all_waypoints[self.next_waypoint-1][0))
+        print("local_position[1]: " + str(self.local_position[1]) + " x waypoint: " + str(self.all_waypoints[self.next_waypoint-1][1))
+        print("local_position[2]: " + str(self.local_position[2]) + " x waypoint: " + str(self.all_waypoints[self.next_waypoint-1][2))
         
         if self.flight_state == States.TAKEOFF:
             altitude = -1.0 * self.local_position[2]
